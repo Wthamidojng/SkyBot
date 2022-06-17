@@ -10,7 +10,6 @@ from asyncio import sleep
 from aiohttp import ClientSession
 from asyncio import TimeoutError
 from discord import ui
-from aiohttp import ClientSession
 
 class Confirm(ui.View):
     def __init__(self, user: discord.User):
