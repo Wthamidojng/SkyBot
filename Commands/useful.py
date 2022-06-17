@@ -27,7 +27,7 @@ class Helpful(commands.Cog):
         return role
     
     async def power(self,user):
-        async with self.bot.db.execute(f"SELECT guild FROM guild WhERE scGuild = 1;") as cur: guilds = await cur.fetchall()
+        async with self.bot.db.execute("SELECT guild FROM guild WhERE scGuild = 1;") as cur: guilds = await cur.fetchall()
         for r in guilds:
             guild = self.bot.get_guild(r[0])
             if guild:
@@ -53,7 +53,7 @@ class Helpful(commands.Cog):
         try: await self.bot.db.execute("INSERT INTO tags VALUES (?,?,?,?);",(tagName,desc,ctx.author.id,approve))
         except Exception: return await ctx.send("Sorry, that tag is already taken.")
         
-        await ctx.send(f"Added tag :thumbsup:")
+        await ctx.send("Added tag :thumbsup:")
 
     @commands.command(name="tag",description="Tag something. Put `unapprove` before the name of the tag if you want to see unapproved tags.", aliases=['t', 'ta'])
     async def tag(self,ctx,*,tag):

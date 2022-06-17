@@ -24,7 +24,7 @@ class Utility(commands.Cog):
 
     async def power(self,user):
         await self.bot.wait_until_ready()
-        async with self.bot.db.execute(f"SELECT guild FROM guild WhERE scGuild = 1;") as cur: guilds = await cur.fetchall()
+        async with self.bot.db.execute("SELECT guild FROM guild WhERE scGuild = 1;") as cur: guilds = await cur.fetchall()
         for r in guilds:
             guild = self.bot.get_guild(r[0])
             person = guild.get_member(user.id)
