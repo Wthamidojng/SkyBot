@@ -163,7 +163,7 @@ class Slash_Fun(commands.Cog):
         for i in range(10):
             try:choices.remove(None)
             except: continue
-        await interaction.response.send_message(f":drum: I choose... :drum:")
+        await interaction.response.send_message(":drum: I choose... :drum:")
         await asyncio.sleep(2)
         await (await interaction.original_message()).edit(content=f":tada: I chose `{choice(choices)}`!")
     
@@ -249,7 +249,7 @@ class Slash_Fun(commands.Cog):
 
       em = discord.Embed(title = "Number Game Start", color=discord.Color.blue())
       em.add_field(name = "Type a number in the chat", value = f"Guess the between **1** and **{max}**", inline=False)
-      em.set_footer(text = f"You have 10 seconds to respond")
+      em.set_footer(text = "You have 10 seconds to respond")
       em.set_thumbnail(url=interaction.user.avatar.url)
       await interaction.response.send_message(embed=em)
       await self.bot.db.execute("INSERT INTO numgameChannels VALUES (?);", (interaction.channel_id))
@@ -266,13 +266,13 @@ class Slash_Fun(commands.Cog):
                 players[str(msg.author)]=(players[str(msg.author)]+1)
             if (guess) > mystnum:
                 em = discord.Embed(title = "Try Again", color=discord.Color.red())
-                em.add_field(name=f"{interaction.user.display_name} Your number was too *high* try guessing *lower*", value = f"waiting for a response", inline=False)
+                em.add_field(name=f"{interaction.user.display_name} Your number was too *high* try guessing *lower*", value = "waiting for a response", inline=False)
                 em.set_thumbnail(url='http://www.clipartbest.com/cliparts/KTj/Xyg/KTjXyg7Tq.jpeg')
                 await interaction.followup.send(embed=em, username=self.bot.user.display_name, avatar_url=self.bot.user.avatar.url)
                 await gamei()
             elif (guess) < mystnum:
                 em = discord.Embed(title = "Try Again", color=discord.Color.red())
-                em.add_field(name=f"{interaction.user.display_name} Your number was too *low* try guessing *higher*", value = f"waiting for a response", inline=False)
+                em.add_field(name=f"{interaction.user.display_name} Your number was too *low* try guessing *higher*", value = "waiting for a response", inline=False)
                 em.set_thumbnail(url='http://www.clipartbest.com/cliparts/aTq/Eoz/aTqEoznTM.png')
                 await interaction.followup.send(embed=em, username=self.bot.user.display_name, avatar_url=self.bot.user.avatar.url)
                 await gamei()

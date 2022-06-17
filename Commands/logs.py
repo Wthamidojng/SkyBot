@@ -43,7 +43,7 @@ class Logs(commands.Cog):
       channel = self.bot.get_channel(921581993945362453)
       m=""
       for message in messages:
-          m+=f"{message.content} , " or f"Not able to be Displayed , "
+          m+=f"{message.content} , " or "Not able to be Displayed , "
       deleter = self.bot.user
       amount = messages.count
       atime = messages[0].created_at
@@ -60,7 +60,7 @@ class Logs(commands.Cog):
     async def on_member_join(self, member):
       channel = self.bot.get_channel(921581993945362453)
       em = discord.Embed(
-          description=f"New Member Joined", color=choice(self.bot.colorList))
+          description="New Member Joined", color=choice(self.bot.colorList))
       em.add_field(name="Member Name", value=member.mention, inline=False)
       em.add_field(name="Joined At", value=member.joined_at, inline=False)
       em.add_field(name="Account Age", value=member.created_at, inline=False)
