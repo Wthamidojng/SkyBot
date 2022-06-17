@@ -260,7 +260,7 @@ class Slash_Fun(commands.Cog):
           msg = await self.bot.wait_for("message", check=lambda msg: msg.channel == interaction.channel, timeout= 10)
           if (msg.content).isnumeric() and max>=int(msg.content):
             guess=int(msg.content)
-            if not str(msg.author) in players:
+            if str(msg.author) not in players:
                   players[str(msg.author)]=1
             else:
                 players[str(msg.author)]=(players[str(msg.author)]+1)
