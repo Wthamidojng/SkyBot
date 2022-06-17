@@ -69,7 +69,7 @@ class Utility(commands.Cog):
     async def mute(self, ctx, user : discord.Member, length: str = "10m", * ,reason="None was specified"):
         if ctx.author.top_role > user.top_role:
             try:
-                time = int("".join(re.findall(re.compile("\d"), length)))
+                time = int("".join(re.findall(re.compile(r"\d"), length)))
                 unit = re.findall(re.compile("s|m|h|d|w"), length)[0]
                 if unit == "w": time = time * 604800
                 elif unit == "d": time = time * 86400
