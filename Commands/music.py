@@ -270,7 +270,8 @@ class Music(commands.Cog):
 
         return state
 
-    def cog_check(self, ctx: commands.Context):
+    @staticmethod
+    def cog_check(ctx: commands.Context):
         if not ctx.guild:
             raise commands.NoPrivateMessage('This command can\'t be used in DM channels.')
 
