@@ -1,4 +1,4 @@
-from asyncio import CancelledError, sleep
+from asyncio import sleep
 from discord.ext import commands
 import discord
 from random import choice
