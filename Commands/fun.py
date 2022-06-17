@@ -328,7 +328,7 @@ class Fun(commands.Cog):
             for i in view.children:
                 i.disabled = True
             await msg.edit(view=view)
-            if view.value == None:
+            if view.value is None:
                 return await ctx.send(f"No response from {user.mention}. Automatically cancelled the game.")
             elif not view.value:
                 return await ctx.send(f"{ctx.author.mention} did not want to play. Cancelling the game.")
@@ -397,7 +397,7 @@ class Fun(commands.Cog):
 
     @commands.command(name="joke",description="choose a random joke from the list of jokes",aliases=["sayjoke"])
     async def joke(self, ctx, user : Union[discord.Member, int] = None):
-        if user != None:
+        if user is not None:
             user = self.bot.check_id(user)
             async with self.bot.db.execute("SELECT * FROM jokes WHERE id = ? ORDER BY RANDOM() LIMIT 1;",(user.id,)) as cur: joke = await cur.fetchone()
             person = None
@@ -418,7 +418,7 @@ class Fun(commands.Cog):
     async def spam(self, ctx, number : str = None, *, msg : str = None):
         try:
             if ((not number.isnumeric()) or (int(number)>20)): return await ctx.send("You must enter a valid number less than 20")
-            if msg == None or len(msg) == 0:
+            if msg is None or len(msg) == 0:
                 return await ctx.reply("Please enter something for me to spam.")
             number = int(number)
             if type(number) != int: number = int(number)

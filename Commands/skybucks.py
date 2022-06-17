@@ -133,7 +133,7 @@ class Skybucks(commands.Cog):
         if user:
             self.bot.check_id(user)    
         await self.userSetup(user)
-        if user == None: await ctx.reply("You can't give Skybucks to yourself!")
+        if user is None: await ctx.reply("You can't give Skybucks to yourself!")
         else: 
             async with self.bot.db.execute("SELECT scb FROM members WHERE memberID = ?", (int(ctx.author.id),)) as cur: balance = await cur.fetchone()
             if balance[0] >= amt and amt > 0:
@@ -214,7 +214,7 @@ class Skybucks(commands.Cog):
         await self.userSetup(ctx.author)
 
         async with self.bot.db.execute("SELECT itemName, itemDesc, sellerID, price, inStock FROM shop WHERE itemID = ?",(int(id),)) as cur: fetch = await cur.fetchone()
-        if fetch != None:
+        if fetch is not None:
             seller = self.bot.get_user(fetch[2]) or await self.bot.fetch_user(fetch[2])
             embed = discord.Embed(title="Item",color=0x107DAC)
             embed.add_field(name="Price",value=fetch[3])

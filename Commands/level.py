@@ -136,7 +136,7 @@ class Level(commands.Cog):
     
     @commands.command(name="multi",description="sets the multiplier for xp")
     async def multiplier(self,ctx,multi = None):
-        if multi == None: return await ctx.send(f"The multi is currently `{await self.multi(ctx.guild.id)}`.")
+        if multi is None: return await ctx.send(f"The multi is currently `{await self.multi(ctx.guild.id)}`.")
         if int(multi) > 10: return await ctx.send("The maximum multi is `10`.")
         admin = discord.utils.get(ctx.guild.roles,name="Leadership_Roles") or await self.role("lsRole",ctx.guild.id)
         if (admin in ctx.author.roles and await self.sc(ctx.guild.id)) or await self.power(ctx.author):
