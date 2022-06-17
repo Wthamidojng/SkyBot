@@ -32,7 +32,7 @@ class MyBot(commands.Bot):
         for ext in self.initial_extensions:
             await self.load_extension(ext)
     
-    async def on_ready():
+    async def on_ready(self):
         print('Bot is Ready')
         await client.tree.sync(guild=discord.Object(id=921230858311057418))
 
