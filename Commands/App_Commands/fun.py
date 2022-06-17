@@ -1,6 +1,5 @@
 import asyncio
 from cgitb import text
-from dataclasses import field
 from typing import Union
 import aiohttp
 from discord.ext import commands
