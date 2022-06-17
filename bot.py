@@ -56,22 +56,9 @@ async def db():
 
 client.colorList = [0x5d8aa8, 0xf0f8ff, 0xe32636, 0xffbf00, 0x9966cc, 0xa4c639, 0xf2f3f4, 0xcd9575, 0x915c83]
 
-def from_id(id: int):
-    try: 
-        user = client.get_user(id)
-        if type(user) != discord.User:
-            raise Exception
-        return user
-    except: return
+def check_id(id: int) -> Union[discord.Member, discord.User]:
+    return client.get_user(id)
 
-def check_id(thing) -> Union[discord.Member, discord.User]:
-    if type(thing) == int:
-        id = from_id(thing)
-        return id
-    else: 
-        return thing
-
-client.from_id = from_id
 client.check_id = check_id
 
 class HelpCMD(commands.HelpCommand):
@@ -151,24 +138,23 @@ class HelpCMD(commands.HelpCommand):
             await mesg.delete()
 
     async def send_error_message(self, error):
-        e = self.context.message.content.split(" ")
-        a = e[1]
-        channel = self.get_destination()
-        mesg = await channel.send(
-            f"There was no command or category named `'{a}'`. View `!help` in order to look at all commands and categories."
+        await self.get_destination().send(
+            f"There was no command or category named `'{self.context.message.content.split(" ")[1]}'`. \
+            View `!help` in order to look at all commands and categories."
         )
 
     async def send_cog_help(self, cog: commands.Cog):
         a = []
         for c in cog.get_commands():
-            if not (await c.can_run(ctx=self.context)):
-                continue
+            if await c.can_run(ctx=self.context):
+                break
+                
         embed = discord.Embed(title=cog.qualified_name, color = choice(client.colorList))
         embed.add_field(name="Commands", value='`' + '` `'.join(a) + '`')
         embed.description = "To view help for a specific command, please type `!help [command]`\nTo view help for all categories and commands, please type `!help`"
         embed.set_footer(text = f"Requested by {self.context.author}", icon_url = self.context.author.avatar.url)
-        channel = self.get_destination()
-        mesg = await channel.send(embed=embed)
+       
+        mesg = await self.get_destination().send(embed=embed)
         await mesg.add_reaction("❌")
         try:
             reaction, user = await self.context.bot.wait_for(
@@ -191,8 +177,8 @@ async def role(role, guild):
         f"SELECT {role} FROM guild WHERE guild = ?;", (guild,)
     ) as cur:
         roleid = await cur.fetchone()
-    role = client.get_guild(guild).get_role(roleid[0])
-    return role
+    return client.get_guild(guild).get_role(roleid[0])
+    
 
 @client.event 
 async def on_member_join(user : discord.Member):
@@ -283,16 +269,6 @@ async def on_command_error(ctx, error):
     try: reaction, user = await client.wait_for("reaction_add", check=lambda reaction, user: str(reaction.emoji) == "❔" and user != client.user, timeout=60)
     except TimeoutError: return await msg.clear_reactions()
     else: await msg.edit(content=f"```{c}```")
-
-@client.tree.error
-async def on_error(interaction: discord.Interaction, error: app_commands.AppCommandError):
-    if hasattr(interaction.command, 'on_error'): return
-
-    error = getattr(error, 'original', error)
-
-    if isinstance(error, app_commands.CommandNotFound): return
-
-
 
 @client.command(name="ping", description="Pings the bot to check its latency")
 async def ping(ctx):
