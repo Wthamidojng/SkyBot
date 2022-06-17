@@ -11,10 +11,8 @@ class Logs(commands.Cog):
       with open("logs.txt","+r") as f: f.write("Message deleted")
       channel = self.bot.get_channel(921581993945362453)
       async for entry in message.guild.audit_logs(limit=1, action=discord.AuditLogAction.message_delete):
-        if entry.target == message.author:
-          deleter = entry.user
-        else:
-          deleter = message.author
+        deleter = entry.user if entry.target == message.author else deleter = message.author
+        
       deleted = discord.Embed(
           description=f"Message deleted in {message.channel.mention}", color=choice(self.bot.colorList))
       deleted.add_field(name="Message", value=message.content or ("This is an embed so it cannot be displayed here"))
@@ -44,15 +42,13 @@ class Logs(commands.Cog):
       m=""
       for message in messages:
           m+=f"{message.content} , " or "Not able to be Displayed , "
-      deleter = self.bot.user
-      amount = messages.count
-      atime = messages[0].created_at
+      
       em = discord.Embed(
           description=f"Bulk messages deleted in {message.channel.mention}", color=choice(self.bot.colorList))
-      em.add_field(name="Deleted By", value=deleter, inline=False)
-      em.add_field(name="Amount", value=amount, inline=False)
+      em.add_field(name="Deleted By", value=self.bot.user, inline=False)
+      em.add_field(name="Amount", value=messages.count, inline=False)
       em.add_field(name="Messages", value=m or ("One or more of the messages is an embed so it cannot be displayed here"), inline=False)
-      em.timestamp = atime
+      em.timestamp = messages[0].created_at
       em.set_thumbnail(url=deleter.avatar.url)
       await channel.send(embed=em)
 
@@ -86,6 +82,7 @@ class Logs(commands.Cog):
       async for entry in channel.guild.audit_logs(limit=1):
           atime = entry.created_at
           user = entry.user
+            
       if before.nick != after.nick:
         em = discord.Embed(
           description="Nickname Updated", color=choice(self.bot.colorList))
@@ -98,12 +95,9 @@ class Logs(commands.Cog):
         await channel.send(embed=em)
 
       if before.roles!=after.roles:
-        finalbeforeroles=''
-        finalafterroles= ''
-        for role in before.roles:
-          finalbeforeroles+=role.name + ', '
-        for role in after.roles:
-          finalafterroles+=role.name + ', '
+        finalbeforeroles = [role.name + ', ' for role in before.roles]
+        finalafterroles = [role.name + ', ' for role in after.roles]
+       
         em = discord.Embed(
           description="Roles Updated", color=choice(self.bot.colorList))
         em.add_field(name="Member Name", value=before.name, inline=False)
@@ -121,21 +115,20 @@ class Logs(commands.Cog):
         if before.channel is None:
           em = discord.Embed(
             description="Voice Channel Joined", color=choice(self.bot.colorList))
-          em.add_field(name="Member Name", value=member.name, inline=False)
           em.add_field(name="Voice Channel Joined", value=after.channel, inline=False)
 
         elif after.channel is None:
           em = discord.Embed(
             description="Voice Channel Left", color=choice(self.bot.colorList))
-          em.add_field(name="Member Name", value=member.name, inline=False)
           em.add_field(name="Channel Left", value=before.channel, inline=False)
 
         else:
           em = discord.Embed(
               description="Voice Channel Switched", color=choice(self.bot.colorList))
-          em.add_field(name="Member Name", value=member.name, inline=False)
           em.add_field(name="Old Voice Channel", value=before.channel, inline=False)
           em.add_field(name="New Voice Channel", value=after.channel, inline=False)
+        
+        em.add_field(name="Member Name", value=member.name, inline=False)
         em.set_thumbnail(url=member.avatar.url)
         await channel.send(embed=em)
 
@@ -143,6 +136,7 @@ class Logs(commands.Cog):
         async for entry in channel.guild.audit_logs(limit=1):
           atime = entry.created_at
           user = entry.user
+            
         em = discord.Embed(
             description="Member Defeaned/Undefeaned", color=choice(self.bot.colorList))
         em.add_field(name="Member Name", value=member.name, inline=False)
@@ -150,7 +144,7 @@ class Logs(commands.Cog):
         else: action="Deafened"
         em.add_field(name="Action", value=action, inline=False)
         em.add_field(name="Done By:", value=user, inline=False)
-        em.timestamp=(atime)
+        em.timestamp = atime
         em.set_thumbnail(url=member.avatar.url)
         await channel.send(embed=em)
 
@@ -300,18 +294,22 @@ class Logs(commands.Cog):
         channel= self.bot.get_channel(payload.channel_id)
         msg= await channel.fetch_message(payload.message_id)
         channel=self.bot.get_channel(932711285903224892)
+        
         user=self.bot.get_user(payload.user_id)
         reactor = (await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)).author
         reaction = discord.utils.get(msg.reactions, emoji=payload.emoji.name) 
 
-        if reaction.count==1:
-          em = discord.Embed(description=msg.author, color=choice(self.bot.colorList))
-          em.add_field(name="Message", value=msg.content or "message could not be typed", inline=False)
-          em.add_field(name="Starred by", value=user.mention, inline=False)
-          em.add_field(name="Jump Link", value=f'[Jump]({msg.jump_url})')
-          em.set_thumbnail(url=reactor.avatar.url)
-          em.timestamp=msg.created_at
-          await channel.send(content=f':star: in {msg.channel.mention} | ID: {msg.id}', embed=em)
+        if reaction.count != 1:
+            return
+        em = discord.Embed(description=msg.author, color=choice(self.bot.colorList))
+        
+        em.add_field(name="Message", value=msg.content or "message could not be typed", inline=False)
+        em.add_field(name="Starred by", value=user.mention, inline=False)
+        em.add_field(name="Jump Link", value=f'[Jump]({msg.jump_url})')
+        em.set_thumbnail(url=reactor.avatar.url)
+        em.timestamp=msg.created_at
+           
+        await channel.send(content=f':star: in {msg.channel.mention} | ID: {msg.id}', embed=em)
           
 
 
