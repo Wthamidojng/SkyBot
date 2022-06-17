@@ -118,13 +118,13 @@ class Logs(commands.Cog):
       channel = self.bot.get_channel(921581993945362453)
 
       if before.channel!=after.channel:
-        if before.channel==None:
+        if before.channel is None:
           em = discord.Embed(
             description="Voice Channel Joined", color=choice(self.bot.colorList))
           em.add_field(name="Member Name", value=member.name, inline=False)
           em.add_field(name="Voice Channel Joined", value=after.channel, inline=False)
 
-        elif after.channel==None:
+        elif after.channel is None:
           em = discord.Embed(
             description="Voice Channel Left", color=choice(self.bot.colorList))
           em.add_field(name="Member Name", value=member.name, inline=False)

@@ -314,7 +314,7 @@ class Slash_Fun(commands.Cog):
         Choice(name="Brown", value=8)
     ])
     async def sendembed(self, interaction: discord.Interaction, title: str, description: str = None, footer: str = None, color: Choice[int] = random.randint(0, 8), thumbnail: discord.Attachment = None, fields: app_commands.Range[int, 0, 10] = 0):
-        if footer == None:
+        if footer is None:
             footer = f"Requested by {interaction.user.display_name}"
         em = discord.Embed(title = "A Title", color=choice(self.bot.colorList), description="A Description")
         def c(m):
@@ -371,7 +371,7 @@ class Slash_Fun(commands.Cog):
             for i in view.children:
                 i.disabled = True
             await msg.edit(view=view)
-            if view.value == None:
+            if view.value is None:
                 return await interaction.followup.send(f"No response from {user.mention}. Automatically cancelled the game.")
             elif not view.value:
                 return await interaction.followup.send(f"{interaction.user.mention} did not want to play. Cancelling the game.")
@@ -444,7 +444,7 @@ class Slash_Fun(commands.Cog):
     @app_commands.guilds(921230858311057418)
     @app_commands.describe(user="The User to Search Jokes For")
     async def joke(self, interaction: discord.Interaction, user: discord.User = None):
-        if user != None:
+        if user is not None:
             async with self.bot.db.execute("SELECT * FROM jokes WHERE id = ? ORDER BY RANDOM() LIMIT 1;",(user.id,)) as cur: joke = await cur.fetchone()
             person = user
         else:
